@@ -1,6 +1,6 @@
-﻿namespace GameStore.WebClient.Product
+﻿namespace GameStore.Domain.Products
 {
-    public class ProductModel
+    public class Product
     {
         public int Id { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using GameStore.Domain.Products;
 using GameStore.WebClient.Product;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,13 @@ namespace GameStore.App.Controllers
     public class ProductController
         : ControllerBase
     {
+        private readonly IProductService _productService;
+
+        public ProductController(IProductService productService)
+        {
+            _productService = productService;
+        }
+        
         /// <summary>
         /// Gets list of products.
         /// </summary>
