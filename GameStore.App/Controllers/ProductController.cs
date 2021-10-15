@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using GameStore.Domain.Products;
 using GameStore.Foundation;
 using GameStore.WebClient.Product;
@@ -31,9 +33,11 @@ namespace GameStore.App.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok();
+            var products = await _productService.GetProducts();
+
+            return Ok(MapProducts(products));
         }
-        
+
         /// <summary>
         /// Gets a product by given ID.
         /// </summary>
@@ -42,25 +46,59 @@ namespace GameStore.App.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok();
+            var product = await _productService.GetProductById(id);
+
+            if (product == null)
+                return NotFound();
+            
+            return Ok(MapProduct(product));
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Post(ProductModel model)
         {
-            return Ok();
+            var product = await _productService.CreateProduct(MapProduct(model));
+
+            if (product == null)
+                return StatusCode(500);
+
+            return Created($"/api/product/{product.Id}", MapProduct(product));
         }
         
         [HttpPut]
         public async Task<IActionResult> Put(ProductModel model)
         {
-            return Ok();
+            var product = await _productService.UpdateProduct(MapProduct(model));
+            
+            if (product == null)
+                return StatusCode(500);
+            
+            return Ok(MapProduct(product));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Detele(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _productService.DeleteProduct(id);
             return NoContent();
+        }
+        
+        private List<ProductModel> MapProducts(IList<Product> products)
+        {
+            return products == null
+                ? new List<ProductModel>()
+                : products.Select(x => _productToProductModelMapper.Map(x)).ToList();
+        }
+        
+        private ProductModel MapProduct(Product product)
+        {
+            return _productToProductModelMapper.Map(product);
+        }
+        
+        private Product MapProduct(ProductModel product)
+        {
+            return _productModelToProductMapper.Map(product);
         }
     }
 }

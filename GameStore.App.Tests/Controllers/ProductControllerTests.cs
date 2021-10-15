@@ -147,7 +147,7 @@ namespace GameStore.App.Tests.Controllers
         public async Task Delete_ShouldDeleteProduct()
         {
             // Act
-            var actionResult = await _controller.Detele(10);
+            var actionResult = await _controller.Delete(10);
             
             // Assert
             var noContentResult = actionResult as NoContentResult;
@@ -163,7 +163,7 @@ namespace GameStore.App.Tests.Controllers
                 .Throws<Exception>();
 
             // Act
-            var act = new Func<Task>(async ()=> await _controller.Detele(10));
+            var act = new Func<Task>(async ()=> await _controller.Delete(10));
             
             // Assert
             act.Should().Throw<Exception>();
@@ -183,7 +183,7 @@ namespace GameStore.App.Tests.Controllers
             var okObjectResult = actionResult as OkObjectResult;
             okObjectResult.Should().NotBeNull();
             okObjectResult.Value.Should().NotBeNull();
-            okObjectResult.Value.Should().BeOfType<IList<ProductModel>>();
+            okObjectResult.Value.Should().BeOfType<List<ProductModel>>();
         }
         
         [Test]
@@ -200,7 +200,7 @@ namespace GameStore.App.Tests.Controllers
             var okObjectResult = actionResult as OkObjectResult;
             okObjectResult.Should().NotBeNull();
             okObjectResult.Value.Should().NotBeNull();
-            okObjectResult.Value.Should().BeOfType<IList<ProductModel>>();
+            okObjectResult.Value.Should().BeOfType<List<ProductModel>>();
         }
         
         [Test]
@@ -217,7 +217,7 @@ namespace GameStore.App.Tests.Controllers
             var okObjectResult = actionResult as OkObjectResult;
             okObjectResult.Should().NotBeNull();
             okObjectResult.Value.Should().NotBeNull();
-            okObjectResult.Value.Should().BeOfType<IList<ProductModel>>();
+            okObjectResult.Value.Should().BeOfType<List<ProductModel>>();
         }
         
         [Test]
@@ -259,7 +259,7 @@ namespace GameStore.App.Tests.Controllers
                 .ReturnsAsync(null as Product);
                 
             // Act
-            var actionResult = await _controller.Get();
+            var actionResult = await _controller.Get(10);
             
             // Assert
             var notFoundResult = actionResult as NotFoundResult;
