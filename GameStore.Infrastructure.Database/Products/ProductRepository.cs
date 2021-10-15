@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GameStore.DataModel;
 using GameStore.Domain.Products;
+using GameStore.Domain.Products.Exceptions;
 using GameStore.Foundation;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Infrastructure.Database.Products
 {
@@ -22,29 +25,66 @@ namespace GameStore.Infrastructure.Database.Products
             _productEntityToProductMapper = productEntityToProductMapper;
         }
         
-        public Task<Product> Add(Product product)
+        public async Task<Product> Add(Product product)
         {
-            throw new System.NotImplementedException();
+            product.ShouldNotNull(nameof(product));
+
+            var productEntity = _productToProductEntityMapper.Map(product);
+
+            _context.Add(productEntity);
+            await _context.SaveChangesAsync();
+
+            productEntity = await _context.Products.FirstOrDefaultAsync(x => x.Id == productEntity.Id);
+
+            return _productEntityToProductMapper.Map(productEntity);
         }
 
-        public Task<Product> Update(Product product)
+        public async Task<Product> Update(Product product)
         {
-            throw new System.NotImplementedException();
+            product.ShouldNotNull(nameof(product));
+            
+            var productEntity = await _context.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
+
+            if (productEntity == null)
+                throw new ProductNotFoundException();
+            
+            _productToProductEntityMapper.Map(product, productEntity);
+            _context.Update(productEntity);
+            await _context.SaveChangesAsync();
+            
+            productEntity = await _context.Products.FirstOrDefaultAsync(x => x.Id == productEntity.Id);
+
+            return _productEntityToProductMapper.Map(productEntity);
         }
 
-        public Task<Product> Get(int id)
+        public async Task<Product> Get(int id)
         {
-            throw new System.NotImplementedException();
+            id.ShouldBeGreaterThanZero(nameof(id));
+            
+            var productEntity = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+
+            return productEntity == null
+                ? null
+                : _productEntityToProductMapper.Map(productEntity);
         }
 
-        public Task<IList<Product>> Get()
+        public async Task<IList<Product>> Get()
         {
-            throw new System.NotImplementedException();
+            var productEntities = await _context.Products.ToListAsync();
+
+            return productEntities.Select(x => _productEntityToProductMapper.Map(x)).ToList();
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new System.NotImplementedException();
+            id.ShouldBeGreaterThanZero(nameof(id));
+            
+            var productEntity = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            if(productEntity == null)
+                return;
+
+            _context.Remove(productEntity);
+            await _context.SaveChangesAsync();
         }
     }
 }

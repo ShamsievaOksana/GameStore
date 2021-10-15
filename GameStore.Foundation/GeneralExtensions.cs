@@ -10,5 +10,11 @@ namespace GameStore.Foundation
             if (value == null)
                 throw new ArgumentNullException(paramName);
         }
+        
+        public static void ShouldBeGreaterThanZero(this int value, string paramName = "value")
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(paramName);
+        }
     }
 }

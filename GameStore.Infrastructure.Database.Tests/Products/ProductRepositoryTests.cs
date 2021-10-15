@@ -8,7 +8,7 @@ using GameStore.Domain.Products;
 using GameStore.Domain.Products.Exceptions;
 using GameStore.Foundation;
 using GameStore.Infrastructure.Database.Products;
-using GameStore.Infrastructure.Database.Tests.Products.Mappers;
+using GameStore.Infrastructure.Database.Products.Mappers;
 using NUnit.Framework;
 
 namespace GameStore.Infrastructure.Database.Tests.Products
