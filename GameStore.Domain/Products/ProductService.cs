@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameStore.Domain.Products.Exceptions;
+using GameStore.Foundation;
 
 namespace GameStore.Domain.Products
 {
@@ -13,29 +15,61 @@ namespace GameStore.Domain.Products
             _productRepository = productRepository;
         }
         
-        public Task<Product> CreateProduct(Product product)
+        public async Task<Product> CreateProduct(Product product)
         {
-            throw new System.NotImplementedException();
+            product.ShouldNotNull(nameof(product));
+            
+            var newProduct = await _productRepository.Add(product);
+
+            if (newProduct == null || newProduct.Id == 0)
+                throw new ProductCouldNotBeStoredException();
+            
+            return newProduct;
         }
 
-        public Task<Product> UpdateProduct(Product product)
+        public async Task<Product> UpdateProduct(Product product)
         {
-            throw new System.NotImplementedException();
+            product.ShouldNotNull(nameof(product));
+            
+            var productId = product.Id;
+            var updatedProduct = await _productRepository.Update(product);
+
+            if (updatedProduct == null)
+                throw new ProductCouldNotBeUpdatedException();
+
+            if (updatedProduct.Id != productId)
+                throw new ProductMismatchException();
+
+            return updatedProduct;
         }
 
-        public Task<Product> GetProductById(int id)
+        public async Task<Product> GetProductById(int id)
         {
-            throw new System.NotImplementedException();
+            id.ShouldBeGreaterThanZero(nameof(id));
+
+            var product = await _productRepository.Get(id);
+
+            if (product == null)
+                throw new  ProductNotFoundException();
+
+            if (product.Id != id)
+                throw new ProductMismatchException();
+            
+            return product;
         }
 
-        public Task<IList<Product>> GetProducts()
+        public async Task<IList<Product>> GetProducts()
         {
-            throw new System.NotImplementedException();
+            var products = await _productRepository.Get();
+
+            return products ?? new List<Product>();
         }
 
-        public Task DeleteProduct(int id)
+        public async Task DeleteProduct(int id)
         {
-            throw new System.NotImplementedException();
+            id.ShouldBeGreaterThanZero(nameof(id));
+            
+            await _productRepository.Delete(id);
         }
     }
 }

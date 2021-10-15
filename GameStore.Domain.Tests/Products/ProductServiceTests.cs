@@ -137,7 +137,7 @@ namespace GameStore.Domain.Tests.Products
                 .ReturnsAsync(new Product {Id = productId});
             
             // Act
-            var updatedProduct = await _service.CreateProduct(new Product(){Id = productId});
+            var updatedProduct = await _service.UpdateProduct(new Product {Id = productId});
 
             // Assert
             updatedProduct.Id.Should().Be(productId);
@@ -159,7 +159,7 @@ namespace GameStore.Domain.Tests.Products
         {
             // Arrange
             _productRepositoryMock.Setup(x => x.Get(It.IsAny<int>()))
-                .ReturnsAsync(new Product() {Id = 20});
+                .ReturnsAsync(new Product {Id = 20});
             
             // Act
             var act = new Func<Task>(async () => await _service.GetProductById(10));
