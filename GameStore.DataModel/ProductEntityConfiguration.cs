@@ -17,7 +17,7 @@ namespace GameStore.DataModel
             
             builder.Property(x => x.Description)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(1000);
             
             builder.Property(x => x.Published)
                 .IsRequired()
