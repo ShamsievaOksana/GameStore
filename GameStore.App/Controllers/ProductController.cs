@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GameStore.Domain.Products;
+using GameStore.Foundation;
 using GameStore.WebClient.Product;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,16 @@ namespace GameStore.App.Controllers
         : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IMapper<ProductModel, Product> _productModelToProductMapper;
+        private readonly IMapper<Product, ProductModel> _productToProductModelMapper;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService,
+            IMapper<ProductModel, Product> productModelToProductMapper,
+            IMapper<Product, ProductModel> productToProductModelMapper)
         {
             _productService = productService;
+            _productModelToProductMapper = productModelToProductMapper;
+            _productToProductModelMapper = productToProductModelMapper;
         }
         
         /// <summary>
