@@ -1,8 +1,7 @@
-﻿using System;
-
-namespace GameStore.DataModel
+﻿namespace GameStore.DataModel
 {
     public class ProductEntity
+        : BaseEntity
     {
         public int Id { get; set; }
 
@@ -13,9 +12,5 @@ namespace GameStore.DataModel
         public decimal Price { get; set; }
 
         public bool Published { get; set; }
-
-        public DateTime Created { get; set; }
-
-        public DateTime Modified { get; set; }
     }
 }

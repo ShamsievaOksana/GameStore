@@ -234,6 +234,51 @@ namespace GameStore.Infrastructure.Database.Tests.Products
             products.Should().HaveCount(3);
         }
 
+        [Test]
+        public async Task Add_ShouldSetCreatedAndModifiedDate()
+        {
+            // Arrange
+            var product = new Product
+            {
+                Name = "Product Name",
+                Description = "Product Description",
+                Price = 10
+            };
+            
+            // Act
+            product = await _repository.Add(product);
+            
+            // Assert
+            var productEntity = await _context.Products.FindAsync(product.Id);
+            (productEntity.Created > DateTime.MinValue).Should().BeTrue();
+            (productEntity.Modified > DateTime.MinValue).Should().BeTrue();
+        }
+        
+        [Test]
+        public async Task Update_ShouldSetModifiedDate()
+        {
+            // Arrange
+            var product = new Product
+            {
+                Name = "Product Name",
+                Description = "Product Description",
+                Price = 10
+            };
+            
+            // Act
+            product = await _repository.Add(product);
+            var productEntity = await _context.Products.FindAsync(product.Id);
+            var modifiedDateAfterAdding = productEntity.Modified;
+            
+            product.Published = true;
+            product = await _repository.Update(product);
+            productEntity = await _context.Products.FindAsync(product.Id);
+            var modifiedDateAfterUpdating = productEntity.Modified;
+            
+            // Assert
+            (modifiedDateAfterUpdating > modifiedDateAfterAdding).Should().BeTrue();
+        }
+
         [TearDown]
         public void TearDown()
         {
