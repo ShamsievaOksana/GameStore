@@ -36,10 +36,23 @@ namespace GameStore.App
 
         public static IServiceCollection AddGameStoreDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("GameStoreDB");
+            var demoMode = configuration.GetValue<bool>("DemoMode");
 
-            services.AddDbContext<GameStoreDbContext>(builder => builder.UseSqlServer(connectionString));
-            
+            if (demoMode)
+            {
+                const string databaseName = "GameStoreDB";
+                services.AddScoped<GameStoreDbContext>(p => new InMemoryGameStoreDbContext(databaseName));
+
+                using var context = new InMemoryGameStoreDbContext(databaseName);
+
+                context.AddRange(DemoData.Products);
+                context.SaveChanges();
+            }
+            else
+            {
+                var connectionString = configuration.GetConnectionString("GameStoreDB");
+                services.AddDbContext<GameStoreDbContext>(builder => builder.UseSqlServer(connectionString));
+            }
             return services;
         }
         
