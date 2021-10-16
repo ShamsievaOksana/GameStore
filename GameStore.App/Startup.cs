@@ -10,13 +10,15 @@ namespace GameStore.App
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public SwaggerSetting SwaggerSetting { get; }
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            SwaggerSetting = Configuration.GetSection("SwaggerSetting").Get<SwaggerSetting>();
         }
-
-        public IConfiguration Configuration { get; }
-
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -28,6 +30,8 @@ namespace GameStore.App
             services.AddGameStoreDbContext(Configuration)
                 .AddProductService()
                 .AddMappers();
+            
+            services.AddSwagger(SwaggerSetting);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +48,11 @@ namespace GameStore.App
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/{SwaggerSetting.Version}/swagger.json", SwaggerSetting.Title);
+            });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

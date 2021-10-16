@@ -6,6 +6,7 @@ using GameStore.Infrastructure.Database.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 namespace GameStore.App
 {
@@ -39,6 +40,22 @@ namespace GameStore.App
 
             services.AddDbContext<GameStoreDbContext>(builder => builder.UseSqlServer(connectionString));
             
+            return services;
+        }
+        
+        public static IServiceCollection AddSwagger(this IServiceCollection services, SwaggerSetting swaggerSetting)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(swaggerSetting.Version, new OpenApiInfo
+                {
+                    Version = swaggerSetting.Version,
+                    Title = swaggerSetting.Title,
+                    Description = swaggerSetting.Description,
+                    TermsOfService = new Uri(swaggerSetting.TermOfServiceUrl)
+                });
+            });
+
             return services;
         }
     }
