@@ -23,7 +23,8 @@ namespace GameStore.WebClient.Product
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            throw new System.NotImplementedException();
+            if (Price <= 0)
+                yield return new ValidationResult("Price should have positive value.", new[] {nameof(Price)});
         }
     }
 }
