@@ -6,7 +6,8 @@ namespace GameStore.Domain.Products.Exceptions
     public class ProductMismatchException
         : Exception
     {
-        public ProductMismatchException()
+        public ProductMismatchException(int expectedProductId, int actualProductId)
+            : this($"Expected Product ID to be {expectedProductId}, but found {actualProductId}")
         {
         }
 

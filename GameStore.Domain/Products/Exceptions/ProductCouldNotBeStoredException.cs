@@ -7,6 +7,7 @@ namespace GameStore.Domain.Products.Exceptions
         : Exception
     {
         public ProductCouldNotBeStoredException()
+            : this("Product could not be stored.")
         {
         }
 

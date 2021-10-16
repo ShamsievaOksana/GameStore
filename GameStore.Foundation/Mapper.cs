@@ -9,7 +9,7 @@ namespace GameStore.Foundation
 
         public TTarget Map(TSource source)
         {
-            source.ShouldNotNull();
+            source.ShouldNotBeNull();
 
             var target = new TTarget();
 

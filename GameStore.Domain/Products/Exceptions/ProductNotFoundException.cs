@@ -6,7 +6,8 @@ namespace GameStore.Domain.Products.Exceptions
     public class ProductNotFoundException
         : Exception
     {
-        public ProductNotFoundException()
+        public ProductNotFoundException(int productId)
+            : this($"Product {productId} does not exist.")
         {
         }
 

@@ -4,7 +4,7 @@ namespace GameStore.Foundation
 {
     public static class GeneralExtensions
     {
-        public static void ShouldNotNull<T>(this T value, string paramName = "value")
+        public static void ShouldNotBeNull<T>(this T value, string paramName = "value")
             where T: class
         {
             if (value == null)

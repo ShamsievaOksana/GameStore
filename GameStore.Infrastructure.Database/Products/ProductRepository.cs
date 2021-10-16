@@ -27,7 +27,7 @@ namespace GameStore.Infrastructure.Database.Products
         
         public async Task<Product> Add(Product product)
         {
-            product.ShouldNotNull(nameof(product));
+            product.ShouldNotBeNull(nameof(product));
 
             var productEntity = _productToProductEntityMapper.Map(product);
 
@@ -41,12 +41,12 @@ namespace GameStore.Infrastructure.Database.Products
 
         public async Task<Product> Update(Product product)
         {
-            product.ShouldNotNull(nameof(product));
+            product.ShouldNotBeNull(nameof(product));
             
             var productEntity = await _context.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
 
             if (productEntity == null)
-                throw new ProductNotFoundException();
+                throw new ProductNotFoundException(product.Id);
             
             _productToProductEntityMapper.Map(product, productEntity);
             _context.Update(productEntity);

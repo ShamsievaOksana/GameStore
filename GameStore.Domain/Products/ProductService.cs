@@ -17,7 +17,7 @@ namespace GameStore.Domain.Products
         
         public async Task<Product> CreateProduct(Product product)
         {
-            product.ShouldNotNull(nameof(product));
+            product.ShouldNotBeNull(nameof(product));
             
             var newProduct = await _productRepository.Add(product);
 
@@ -29,7 +29,7 @@ namespace GameStore.Domain.Products
 
         public async Task<Product> UpdateProduct(Product product)
         {
-            product.ShouldNotNull(nameof(product));
+            product.ShouldNotBeNull(nameof(product));
             
             var productId = product.Id;
             var updatedProduct = await _productRepository.Update(product);
@@ -38,7 +38,7 @@ namespace GameStore.Domain.Products
                 throw new ProductCouldNotBeUpdatedException();
 
             if (updatedProduct.Id != productId)
-                throw new ProductMismatchException();
+                throw new ProductMismatchException(productId, updatedProduct.Id);
 
             return updatedProduct;
         }
@@ -50,10 +50,10 @@ namespace GameStore.Domain.Products
             var product = await _productRepository.Get(id);
 
             if (product == null)
-                throw new  ProductNotFoundException();
+                throw new  ProductNotFoundException(id);
 
             if (product.Id != id)
-                throw new ProductMismatchException();
+                throw new ProductMismatchException(id, product.Id);
             
             return product;
         }

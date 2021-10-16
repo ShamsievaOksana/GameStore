@@ -9,8 +9,8 @@ namespace GameStore.App.Mappers.Products
     {
         public override void Map(Product source, ProductModel target)
         {
-            source.ShouldNotNull(nameof(source));
-            target.ShouldNotNull(nameof(target));
+            source.ShouldNotBeNull(nameof(source));
+            target.ShouldNotBeNull(nameof(target));
 
             target.Id = source.Id;
             target.Name = source.Name;

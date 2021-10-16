@@ -7,6 +7,7 @@ namespace GameStore.Domain.Products.Exceptions
         : Exception
     {
         public ProductCouldNotBeUpdatedException()
+            : this("Product could not be updated.")
         {
         }
 

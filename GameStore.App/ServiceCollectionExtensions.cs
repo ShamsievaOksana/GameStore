@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using GameStore.DataModel;
 using GameStore.Domain.Products;
+using GameStore.Domain.Products.Exceptions;
 using GameStore.Foundation;
+using GameStore.Foundation.ExceptionHandling;
 using GameStore.Infrastructure.Database.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -69,6 +73,18 @@ namespace GameStore.App
                 });
             });
 
+            return services;
+        }
+
+        public static IServiceCollection AddExceptionStatusCodeMapping(this IServiceCollection services)
+        {
+            services.AddSingleton<IExceptionStatusCodeMapping>(_ => 
+                new ExceptionStatusCodeMapping(new Dictionary<Type, HttpStatusCode>()
+            {
+                {typeof(ProductMismatchException), HttpStatusCode.BadGateway},
+                {typeof(ProductNotFoundException), HttpStatusCode.NotFound},
+            }));
+                
             return services;
         }
     }
