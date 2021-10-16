@@ -1,7 +1,9 @@
 ﻿using System;
 using FluentAssertions;
+using GameStore.DataModel;
 using GameStore.Domain.Products;
 using GameStore.Infrastructure.Database.Products;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
@@ -18,7 +20,13 @@ namespace GameStore.App.Tests
         {
             _serviceCollection = new ServiceCollection();
 
-            _serviceCollection.AddProductService();
+            _serviceCollection
+                .AddProductService()
+                .AddMappers();
+            
+            // register mocked DB context
+            _serviceCollection.AddDbContext<GameStoreDbContext>(o =>
+                o.UseInMemoryDatabase($"TEST_{DateTime.UtcNow.Ticks}"));
 
             _serviceProvider = _serviceCollection.BuildServiceProvider();
         }
