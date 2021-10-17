@@ -1,5 +1,11 @@
 <div *ngIf="product">
   <h3>{{ product.name }}</h3>
-  <h4>{{ product.price | currency }}</h4>
+  <h4>
+    <mat-chip-list aria-label="Fish selection">
+        <mat-chip color="accent" selected>{{ product.price | currency }}</mat-chip>
+        <mat-chip color="primary" selected *ngIf="product.published">Published</mat-chip>
+        <mat-chip *ngIf="!product.published">Draft</mat-chip>
+      </mat-chip-list>  
+    </h4>
   <p>{{ product.description }}</p>
 </div>

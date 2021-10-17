@@ -1,9 +1,13 @@
-<div *ngFor="let product of products">
-
-    <h3>
-        <a [title]="product.name + ' details'" [routerLink]="['/products', product.id]">
-            {{ product.name }}
-         </a>
-    </h3>
-  
+<div class="product-cards">
+    <div class="product-card" *ngFor="let product of products">
+        <mat-card>
+            <mat-card-title>{{ product.name }}</mat-card-title>
+            <mat-card-subtitle>
+                {{ product.price | currency }}
+            </mat-card-subtitle>
+            <mat-card-actions align="end">
+                <a [routerLink]="['/products', product.id]" mat-button color="accent">DETAILS</a>
+            </mat-card-actions>
+        </mat-card>
+    </div>
 </div>
