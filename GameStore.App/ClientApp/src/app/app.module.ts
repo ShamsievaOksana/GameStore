@@ -28,9 +28,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     ProductModule,
-    RouterModule.forRoot([
-      { path: '', component: ProductComponent }
-    ])
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -10,7 +10,8 @@ import { ProductService } from './product-service';
   imports: [
     CommonModule,
     RouterModule.forRoot([
-      { path: 'products', component: ProductComponent }
+      { path: 'products', component: ProductComponent },
+      { path: 'products/:productId', component: ProductDetailsComponent }
     ])
   ],
   exports: [
